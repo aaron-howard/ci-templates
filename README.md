@@ -64,14 +64,36 @@ jobs:
       contents: read
 ```
 
-## Semgrep custom rules
+## Semgrep
 
-Keep app-specific rules in each project at `config/semgrep/rules/`. The shared workflow scans that path when present.
+| Path | Purpose |
+|------|---------|
+| `rules/` | Shared baseline rules (secrets, fetch timeouts) — checked out during CI scans |
+| App repo `config/semgrep/rules/` | Stack-specific rules (e.g. SvelteKit architecture) |
+
+The Semgrep workflow checks out this repo into `.ci-templates/` and loads `rules/` when present, plus the caller’s `config/semgrep/rules/`.
 
 ## Pinning versions
 
-`@main` tracks the latest templates. For stability, pin to a commit SHA or tag:
+**Recommended:** pin app repos to a release tag, not `@main`:
 
 ```yaml
-uses: aaron-howard/ci-templates/.github/workflows/semgrep.yml@abc1234
+uses: aaron-howard/ci-templates/.github/workflows/semgrep.yml@v1.0.0
 ```
+
+| Tag | Notes |
+|-----|-------|
+| `v1.0.0` | Initial release — Semgrep baseline, CI, E2E reusable workflows |
+
+To cut a new release: update `VERSION` and `CHANGELOG.md`, merge to `main`, then:
+
+```bash
+git tag -a v1.0.0 -m "ci-templates v1.0.0"
+git push origin v1.0.0
+```
+
+Create a GitHub Release from the tag so Dependabot and docs can reference it.
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md).
