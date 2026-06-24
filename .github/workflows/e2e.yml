@@ -11,6 +11,10 @@ on:
         description: Job timeout in minutes
         type: number
         default: 15
+    secrets:
+      DATABASE_URL:
+        description: Optional database URL for E2E (Playwright webServer)
+        required: false
 
 permissions:
   contents: read
@@ -20,6 +24,8 @@ jobs:
     name: Playwright E2E
     runs-on: ubuntu-latest
     timeout-minutes: ${{ inputs.timeout-minutes }}
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - uses: actions/checkout@v6
 
