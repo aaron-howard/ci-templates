@@ -64,9 +64,14 @@ jobs:
       contents: read
 ```
 
-## Semgrep custom rules
+## Semgrep
 
-Keep app-specific rules in each project at `config/semgrep/rules/`. The shared workflow scans that path when present.
+| Path | Purpose |
+|------|---------|
+| `rules/` | Shared baseline rules (secrets, fetch timeouts) — checked out during CI scans |
+| App repo `config/semgrep/rules/` | Stack-specific rules (e.g. SvelteKit architecture) |
+
+The Semgrep workflow checks out this repo into `.ci-templates/` and loads `rules/` when present, plus the caller’s `config/semgrep/rules/`.
 
 ## Pinning versions
 
