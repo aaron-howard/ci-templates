@@ -4,11 +4,20 @@ Reusable GitHub Actions workflows for projects under [aaron-howard](https://gith
 
 This repository contains **workflow definitions only** — it is not an application. Workflows run against the **calling repository** when invoked with `workflow_call`.
 
-## Private repo access
+## Repository visibility
 
-If this repo is private, enable reusable workflow access:
+| Caller repo | `ci-templates` must be |
+|-------------|------------------------|
+| **Public** (e.g. `profile-page`) | **Public** |
+| Private | Private or public, with Actions access enabled |
+
+Public repos **cannot** call reusable workflows in a private repo — GitHub returns *workflow was not found*.
+
+If you keep this repo **private**, enable reusable workflow access:
 
 **Settings → Actions → General → Access** → *Accessible from repositories owned by the user `aaron-howard`*.
+
+Only **private** caller repos can use a private `ci-templates` repo.
 
 ## Workflows
 
