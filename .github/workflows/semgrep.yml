@@ -17,6 +17,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Checkout shared Semgrep rules
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository_owner }}/ci-templates
+          path: .ci-templates
+          sparse-checkout: |
+            rules
+          sparse-checkout-cone-mode: false
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
@@ -28,6 +37,9 @@ jobs:
         run: |
           set +e
           configs="--config p/ci --config p/typescript --config p/nodejs"
+          if [ -d .ci-templates/rules ]; then
+            configs="$configs --config .ci-templates/rules"
+          fi
           if [ -d config/semgrep/rules ]; then
             configs="$configs --config config/semgrep/rules"
           fi

@@ -1,0 +1,28 @@
+rules:
+  - id: baseline-no-hardcoded-secrets
+    message: Possible hardcoded secret — use environment variables instead.
+    severity: ERROR
+    languages:
+      - typescript
+      - javascript
+    patterns:
+      - pattern-regex: '(?i)(api[_-]?key|secret|password|token|authorization)\s*[:=]\s*[''"][a-z0-9_\-]{8,}[''"]'
+    paths:
+      exclude:
+        - '**/*.test.ts'
+        - '**/*.spec.ts'
+        - '**/tests/**'
+
+  - id: baseline-no-fetch-without-signal
+    message: External fetch calls must set signal (e.g. AbortSignal.timeout(ms)) for timeouts in server code.
+    severity: WARNING
+    languages:
+      - typescript
+      - javascript
+    paths:
+      include:
+        - '**/server/**'
+        - '**/*.server.ts'
+    patterns:
+      - pattern: 'await fetch($URL, { ... })'
+      - pattern-not: 'await fetch($URL, { ..., signal: $S, ... })'
