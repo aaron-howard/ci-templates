@@ -27,11 +27,12 @@ jobs:
       - name: Run Semgrep scan
         run: |
           set +e
+          configs="--config p/ci --config p/typescript --config p/nodejs"
+          if [ -d config/semgrep/rules ]; then
+            configs="$configs --config config/semgrep/rules"
+          fi
           semgrep scan \
-            --config p/ci \
-            --config p/typescript \
-            --config p/nodejs \
-            --config config/semgrep/rules \
+            $configs \
             --sarif --sarif-output=semgrep.sarif \
             --metrics off \
             --error
